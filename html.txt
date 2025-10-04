@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraForge: 25 Years of Earth Science</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+    
+    <header>
+        <div class="logo">
+            <i class="fas fa-satellite"></i>
+            <div>
+                <h1>TERRAFORGE</h1>
+                <span>25 Years of Earth Observation</span>
+            </div>
+        </div>
+        <nav>
+            <a href="#home" class="active">Home</a>
+            <a href="#data">Data</a>
+            <a href="#query">Query</a>
+        </nav>
+    </header>
+    
+    <!-- Sticky Instrument Navigation -->
+    <div class="sticky-instruments" id="stickyInstruments">
+        <div class="sticky-instruments-container">
+            <div class="sticky-instrument-card" onclick="selectStickyInstrument('aster')">
+                <div class="sticky-instrument-icon">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <h3>ASTER</h3>
+            </div>
+            <div class="sticky-instrument-card" onclick="selectStickyInstrument('ceres')">
+                <div class="sticky-instrument-icon">
+                    <i class="fas fa-cloud-sun"></i>
+                </div>
+                <h3>CERES</h3>
+            </div>
+            <div class="sticky-instrument-card" onclick="selectStickyInstrument('misr')">
+                <div class="sticky-instrument-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>MISR</h3>
+            </div>
+            <div class="sticky-instrument-card" onclick="selectStickyInstrument('modis')">
+                <div class="sticky-instrument-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h3>MODIS</h3>
+            </div>
+            <div class="sticky-instrument-card" onclick="selectStickyInstrument('mopitt')">
+                <div class="sticky-instrument-icon">
+                    <i class="fas fa-smog"></i>
+                </div>
+                <h3>MOPITT</h3>
+            </div>
+        </div>
+    </div>
+    
+    <section class="hero" id="home">
+        <div class="stars" id="stars"></div>
+        <div class="hero-content">
+            <h2>25 Years of Watching Our Earth</h2>
+            <p>TerraForge has been continuously observing our planet for a quarter century, collecting vital data on Earth's atmosphere, land, oceans, and energy balance. Explore how this data reveals our changing world and impacts us all.</p>
+            <button class="btn" onclick="scrollToSection('data')">Explore Data</button>
+        </div>
+        
+        <div class="globe-container" id="globe-container">
+            <div class="globe">
+                <div class="globe-overlay"></div>
+                <div class="heat-overlay"></div>
+            </div>
+            <div class="earth-info">Drag to rotate • Scroll to zoom</div>
+        </div>
+    </section>
+    
+    <section class="data-visualization" id="data">
+        <div class="container">
+            <div class="section-title">
+                <h2>Earth Science Data Visualizations</h2>
+                <p>Explore 25 years of TerraForge data to understand changes in our planet's systems</p>
+            </div>
+            <div class="viz-container">
+                <div class="viz-controls">
+                    <button class="viz-btn active" onclick="showViz('temperature')">Temperature</button>
+                    <button class="viz-btn" onclick="showViz('co2')">CO2 Levels</button>
+                    <button class="viz-btn" onclick="showViz('ice')">Ice Coverage</button>
+                    <button class="viz-btn" onclick="showViz('vegetation')">Vegetation</button>
+                </div>
+                <div class="viz-display">
+                    <div class="viz-content active" id="temperature-viz">
+                        <div class="chart-container">
+                            <canvas id="tempChart" class="chart"></canvas>
+                            <div class="data-loading" id="temp-loading">
+                                <div class="loader"></div>
+                                <p>Loading temperature data from NASA API...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="viz-content" id="co2-viz">
+                        <div class="chart-container">
+                            <canvas id="co2Chart" class="chart"></canvas>
+                            <div class="data-loading" id="co2-loading">
+                                <div class="loader"></div>
+                                <p>Loading CO2 data from NASA API...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="viz-content" id="ice-viz">
+                        <div class="chart-container">
+                            <canvas id="iceChart" class="chart"></canvas>
+                            <div class="data-loading" id="ice-loading">
+                                <div class="loader"></div>
+                                <p>Loading ice coverage data from NASA API...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="viz-content" id="vegetation-viz">
+                        <div class="chart-container">
+                            <canvas id="vegChart" class="chart"></canvas>
+                            <div class="data-loading" id="veg-loading">
+                                <div class="loader"></div>
+                                <p>Loading vegetation data from NASA API...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-track">
+                        <div class="timeline-progress"></div>
+                    </div>
+                    <div class="timeline-markers">
+                        <div class="timeline-marker">
+                            <span>1999</span>
+                        </div>
+                        <div class="timeline-marker">
+                            <span>2005</span>
+                        </div>
+                        <div class="timeline-marker">
+                            <span>2010</span>
+                        </div>
+                        <div class="timeline-marker">
+                            <span>2015</span>
+                        </div>
+                        <div class="timeline-marker">
+                            <span>2020</span>
+                        </div>
+                        <div class="timeline-marker">
+                            <span>2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- World Map Section -->
+    <section class="world-map-section" id="world-map">
+        <div class="world-map-container">
+            <h3 class="world-map-title">Global Data Coverage</h3>
+            <div id="worldMap"></div>
+            <div class="map-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4fc3f7;"></div>
+                    <span>Data Available</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ff5252;"></div>
+                    <span>Selected Location</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Custom Data Query Section -->
+    <section class="custom-data-query" id="query">
+        <div class="container">
+            <div class="section-title">
+                <h2>Custom Data Query</h2>
+                <p>Explore TerraForge satellite data for specific dates, locations, and areas of interest</p>
+            </div>
+            <div class="query-container">
+                <form id="queryForm" class="query-form">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataset">Dataset</label>
+                        <select id="dataset" name="dataset" required>
+                            <option value="">Select a dataset</option>
+                            <option value="temperature">Temperature</option>
+                            <option value="vegetation">Vegetation Index</option>
+                            <option value="aerosol">Aerosol Optical Depth</option>
+                            <option value="water_vapor">Water Vapor</option>
+                            <option value="clouds">Cloud Properties</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="area">Area Size (km)</label>
+                        <input type="number" id="area" name="area" placeholder="e.g., 10" min="1" max="100" value="10" required>
+                    </div>
+                </form>
+                
+                <!-- Location Form -->
+                <div class="location-section">
+                    <div class="location-header">
+                        <div class="location-indicator"></div>
+                        <h3>Location</h3>
+                    </div>
+                    <div class="query-form">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" placeholder="e.g., New York, USA" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude</label>
+                            <input type="number" id="latitude" name="latitude" placeholder="e.g., 40.7128" step="0.0001" min="-90" max="90" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude">Longitude</label>
+                            <input type="number" id="longitude" name="longitude" placeholder="e.g., -74.0060" step="0.0001" min="-180" max="180" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" form="queryForm" class="btn">Query Data</button>
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+                <div class="api-info">
+                    <p>Data source: <a href="https://earthdata.nasa.gov/" target="_blank">NASA Earth Observing System Data and Information System (EOSDIS)</a></p>
+                </div>
+                <div class="query-result" id="queryResult">
+                    <div class="result-header">
+                        <h3 id="resultTitle">Query Results</h3>
+                        <div class="result-date" id="resultDate"></div>
+                    </div>
+                    <div class="result-content">
+                        <div class="result-visualization">
+                            <div class="data-visualization-bar" id="dataVisualizationBar">
+                                <div class="data-gradient"></div>
+                                <div class="data-extremes">
+                                    <div class="data-extreme high">
+                                        <div class="data-extreme-value" id="maxValue">--</div>
+                                        <div class="data-extreme-label">Highest</div>
+                                    </div>
+                                    <div class="data-extreme low">
+                                        <div class="data-extreme-value" id="minValue">--</div>
+                                        <div class="data-extreme-label">Lowest</div>
+                                    </div>
+                                </div>
+                                <div class="data-pixels" id="dataPixels"></div>
+                            </div>
+                            <div class="data-globe-container" id="data-globe-container">
+                                <div class="data-globe-info">Interactive data visualization</div>
+                            </div>
+                            <div class="layer-controls" id="layerControls">
+                                <div class="layer-control">
+                                    <div class="layer-indicator" style="background-color: #ff5722;"></div>
+                                    <span>Temperature</span>
+                                </div>
+                                <div class="layer-control">
+                                    <div class="layer-indicator" style="background-color: #8bc34a;"></div>
+                                    <span>Vegetation</span>
+                                </div>
+                                <div class="layer-control">
+                                    <div class="layer-indicator" style="background-color: #03a9f4;"></div>
+                                    <span>Water Vapor</span>
+                                </div>
+                                <div class="layer-control">
+                                    <div class="layer-indicator" style="background-color: #9e9e9e;"></div>
+                                    <span>Aerosols</span>
+                                </div>
+                                <div class="layer-control">
+                                    <div class="layer-indicator" style="background-color: #ffffff;"></div>
+                                    <span>Clouds</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-data">
+                            <div class="data-item">
+                                <span class="data-label">Location:</span>
+                                <span class="data-value" id="resultLocation"></span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Coordinates:</span>
+                                <span class="data-value" id="resultCoords"></span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Dataset:</span>
+                                <span class="data-value" id="resultDataset"></span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Value:</span>
+                                <span class="data-value" id="resultValue"></span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Unit:</span>
+                                <span class="data-value" id="resultUnit"></span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Quality:</span>
+                                <span class="data-value" id="resultQuality"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
